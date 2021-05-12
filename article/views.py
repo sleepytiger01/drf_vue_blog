@@ -1,19 +1,11 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from rest_framework import status
-from rest_framework import mixins
-from rest_framework import generics
-from rest_framework.permissions import IsAdminUser
 from rest_framework import viewsets
 from rest_framework import filters
 
-from django_filters.rest_framework import DjangoFilterBackend
-
-from article.models import Article
+from article.models import Article, Category
 from article.permissions import IsAdminUserOrReadOnly
-# from article.serializers import ArticleListSerializer, ArticleDetailSerializer
 from article.serializers import ArticleSerializer
+from article.serializers import CategorySerializer
+from article.serializers import CategoryDetailSerializer
 
 
 class ArticleViewSet(viewsets.ModelViewSet):
@@ -28,18 +20,13 @@ class ArticleViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user)
 
 
-"""
-class ArticleDetail(APIView):
-    queryset = Article.objects.all()
-    serializer_class = ArticleDetailSerializer
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
     permission_classes = [IsAdminUserOrReadOnly]
 
-
-class ArticleList(generics.ListCreateAPIView):
-    queryset = Article.objects.all()
-    serializer_class = ArticleListSerializer
-    permission_classes = [IsAdminUserOrReadOnly]
-
-    def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
-"""
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return CategorySerializer
+        else:
+            return CategoryDetailSerializer
