@@ -1,11 +1,12 @@
 from rest_framework import viewsets
 from rest_framework import filters
 
-from article.models import Article, Category
+from article.models import Article, Category, Tag
 from article.permissions import IsAdminUserOrReadOnly
 from article.serializers import ArticleSerializer
 from article.serializers import CategorySerializer
 from article.serializers import CategoryDetailSerializer
+from article.serializers import TagSerializer
 
 
 class ArticleViewSet(viewsets.ModelViewSet):
@@ -30,3 +31,9 @@ class CategoryViewSet(viewsets.ModelViewSet):
             return CategorySerializer
         else:
             return CategoryDetailSerializer
+
+
+class TagViewSet(viewsets.ModelViewSet):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+    permission_classes = [IsAdminUserOrReadOnly]

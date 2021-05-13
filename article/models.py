@@ -16,6 +16,16 @@ class Category(models.Model):
     def __str__(self):
         return self.title
 
+class Tag(models.Model):
+    """文章标签"""
+    text = models.CharField(max_length=30)
+
+    class Meta:
+        ordering = ['-id']
+
+    def __str__(self):
+        return self.text
+
 
 # 博客文章 model
 class Article(models.Model):
@@ -24,6 +34,12 @@ class Article(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
+        related_name='articles'
+    )
+    # 标签
+    tags = models.ManyToManyField(
+        Tag,
+        blank=True,
         related_name='articles'
     )
     author = models.ForeignKey(
