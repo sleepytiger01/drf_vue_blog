@@ -77,10 +77,15 @@ class ArticleSerializer(serializers.HyperlinkedModelSerializer):
 
     # 覆写方法，如果输入的标签不存在则创建它
     def to_internal_value(self, data):
-        tags_data = data.get('tags')
+        # tags_data = data.get('tags')
+        tags_data = data['tags']
+
+        print(type(tags_data))
+        print(tags_data)
 
         if isinstance(tags_data, list):
             for text in tags_data:
+                print("2")
                 if not Tag.objects.filter(text=text).exists():
                     Tag.objects.create(text=text)
 
