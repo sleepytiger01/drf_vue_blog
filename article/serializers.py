@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from article.models import Article, Category, Tag, Avatar
+from comment.serializers import CommentSerializer
 from user_info.serializers import UserDescSerializer
 
 
@@ -149,6 +150,9 @@ class ArticleDetailSerializer(ArticleBaseSerializer):
     body_html = serializers.SerializerMethodField()
     # 渲染后的目录
     toc_html = serializers.SerializerMethodField()
+
+    id = serializers.IntegerField(read_only=True)
+    comments = CommentSerializer(many=True, read_only=True)
 
     def get_body_html(self, obj):
         return obj.get_md()[0]
