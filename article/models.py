@@ -29,6 +29,10 @@ class Tag(models.Model):
         return self.text
 
 
+class Avatar(models.Model):
+    content = models.ImageField(upload_to='avatar/%Y%m%d')
+
+
 # 博客文章 model
 class Article(models.Model):
     category = models.ForeignKey(
@@ -58,6 +62,14 @@ class Article(models.Model):
     created = models.DateTimeField(default=timezone.now)
     # 更新时间
     updated = models.DateTimeField(auto_now=True)
+    # 标题图
+    avatar = models.ForeignKey(
+        Avatar,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='article'
+    )
 
     def get_md(self):
         md = Markdown(
@@ -76,4 +88,5 @@ class Article(models.Model):
 
     def __str__(self):
         return self.title
+
 
