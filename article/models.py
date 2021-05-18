@@ -3,6 +3,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from markdown import Markdown
 
 
 class Category(models.Model):
@@ -15,6 +16,7 @@ class Category(models.Model):
 
     def __str__(self):
         return self.title
+
 
 class Tag(models.Model):
     """文章标签"""
@@ -56,6 +58,18 @@ class Article(models.Model):
     created = models.DateTimeField(default=timezone.now)
     # 更新时间
     updated = models.DateTimeField(auto_now=True)
+
+    def get_md(self):
+        md = Markdown(
+            extensions=[
+                'markdown.extensions.extra',
+                'markdown.extensions.codehilite',
+                'markdown.extensions.toc',
+            ]
+        )
+        md_body = md.convert(self.body)
+        # toc 是渲染后的目录
+        return md_body, md.toc
 
     class Meta:
         ordering = ['-created']
