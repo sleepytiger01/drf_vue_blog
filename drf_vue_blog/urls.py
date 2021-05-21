@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 from article import views
 from comment.views import CommentViewSet
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 router = DefaultRouter()
 router.register(r'article', views.ArticleViewSet)
@@ -32,6 +33,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     path('api/', include(router.urls)),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     # article/urls.py 可以全部注释掉，不需要了
     # path('api/article/', include('article.urls', namespace='article')),
 ]
